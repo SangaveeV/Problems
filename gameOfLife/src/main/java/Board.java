@@ -45,6 +45,7 @@ public class Board {
                 int yCell = cell.y + j;
                 if (xCell >= 0 && yCell >= 0 && xCell < columns && yCell < columns) {
                     Cell neighbourCell = new Cell(xCell, yCell);
+                    //null pointer exception
                     int value = this.initialState.get(neighbourCell);
                     neighboursMap.put(neighbourCell, value);
                 }
