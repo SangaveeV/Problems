@@ -1,55 +1,61 @@
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardTest {
 
     @Test
     void getNoOfNeighboursforACell() {
         Board board = new Board(3, 3, initialState());
-        Cell cell = new Cell(1, 1);
-        Cell cell1=new Cell(0,0);
-        assertEquals(3,board.aliveNeighbours(cell1));
-        assertEquals(8, board.aliveNeighbours(cell));
+        Cell cell = new Cell(1, 1,1);
+        Cell cell1=new Cell(0,0,0);
+        assertEquals(3,board.aliveNeighbours(cell));
+        assertEquals(1, board.aliveNeighbours(cell1));
     }
 
     @Test
     void checkAliveOrDead(){
         Board board=new Board(3,3,initialState());
         board.nextState();
-        Cell cell = new Cell(1, 1);
-        assertEquals(nextState().get(cell),board.displayNextState().get(cell));
+        List<Cell> expected=nextState();
+        List<Cell> actual=board.displayNextState();
+        System.out.println(expected);
+        System.out.println(actual);
+
+        assertTrue(expected.equals(actual));
     }
 
-    private HashMap<Cell,Integer> initialState() {
-        HashMap<Cell,Integer> state=new HashMap<>();
-        state.put(new Cell(0,0),0);
-        state.put(new Cell(0,1),0);
-        state.put(new Cell(0,2),1);
-        state.put(new Cell(1,0),0);
-        state.put(new Cell(1,1),1);
-        state.put(new Cell(1,2),0);
-        state.put(new Cell(2,0),1);
-        state.put(new Cell(2,1),0);
-        state.put(new Cell(2,2),1);
+    private List<Cell> initialState() {
+        List<Cell> state=new ArrayList<>();
+        state.add(new Cell(0,0,0));
+        state.add(new Cell(0,1,0));
+        state.add(new Cell(0,2,1));
+        state.add(new Cell(1,0,0));
+        state.add(new Cell(1,1,1));
+        state.add(new Cell(1,2,0));
+        state.add(new Cell(2,0,1));
+        state.add(new Cell(2,1,0));
+        state.add(new Cell(2,2,1));
+        return state;
+    }
+    private List<Cell> nextState() {
+        List<Cell> state=new ArrayList<>();
+        state.add(new Cell(0,0,0));
+        state.add(new Cell(0,1,0));
+        state.add(new Cell(0,2,0));
+        state.add(new Cell(1,0,0));
+        state.add(new Cell(1,1,1));
+        state.add(new Cell(1,2,1));
+        state.add(new Cell(2,0,0));
+        state.add(new Cell(2,1,1));
+        state.add(new Cell(2,2,0));
         return state;
     }
 
-    private HashMap<Cell,Integer> nextState() {
-        HashMap<Cell,Integer> state=new HashMap<>();
-        state.put(new Cell(0,0),0);
-        state.put(new Cell(0,1),0);
-        state.put(new Cell(0,2),0);
-        state.put(new Cell(1,0),0);
-        state.put(new Cell(1,1),1);
-        state.put(new Cell(1,2),0);
-        state.put(new Cell(2,0),0);
-        state.put(new Cell(2,1),1);
-        state.put(new Cell(2,2),0);
-        return state;
-    }
 
 
 
