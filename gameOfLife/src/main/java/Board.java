@@ -1,11 +1,13 @@
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Board {
     private int rows;
     private int columns;
-    private List<Cell> initialState;
-    private List<Cell> nextState;
+    private Collection<Cell> initialState;
+    private Collection<Cell> nextState;
+
 
     public Board(int rows, int columns, List<Cell> initialState) {
         this.rows = rows;
@@ -15,61 +17,47 @@ public class Board {
     }
 
     int aliveNeighbours(Cell cell) {
-        int noOfAliveNeigbours = 0;
-        List<Cell> neighboursList = neighbours(cell);
-        for (Cell neighbour : neighboursList) {
-            if (neighbour.state == 1)
-                noOfAliveNeigbours += 1;
+        int noOfAliveNeighbours = 0;
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (isValid(cell.x + i, cell.y + j) &&
+                        findIfAlive(cell.x + i, cell.y + j)) {
+                    noOfAliveNeighbours += 1;
+                }
+            }
         }
-        if (cell.state == 0) {
-            return noOfAliveNeigbours;
-        }
-        return noOfAliveNeigbours - 1;
+        return noOfAliveNeighbours - cell.state.getState();
     }
 
     void nextState() {
         for (Cell cell : initialState) {
             int noOfAliveNeighbours = aliveNeighbours(cell);
-            if (noOfAliveNeighbours < 2 || noOfAliveNeighbours > 3) {
-                nextState.add(new Cell(cell.x, cell.y, 0));
-                continue;
-            }
-            if (noOfAliveNeighbours == 3 && cell.state == 0) {
-                nextState.add(new Cell(cell.x, cell.y, 1));
-                continue;
-            }
-            if (noOfAliveNeighbours == 2 || noOfAliveNeighbours == 3) {
-                nextState.add(cell);
-            }
+            CellState state = nextGeneration(noOfAliveNeighbours, cell);
+            nextState.add(new Cell(cell.x, cell.y, state));
         }
-
     }
 
-    List<Cell> neighbours(Cell cell) {
-        List<Cell> neighboursList = new ArrayList<>();
-        List<Cell> neighbours=new ArrayList<>();
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                int xCell = cell.x + i;
-                int yCell = cell.y + j;
-                if (isValid(xCell, yCell)) {
-                    neighbours=findNeighbour(xCell,yCell);
-                    neighboursList.addAll(neighbours);
-                }
-            }
+    CellState nextGeneration(int noOfAliveNeighbours, Cell cell) {
+        if (noOfAliveNeighbours < 2 || noOfAliveNeighbours > 3) {
+            return CellState.DEAD;
         }
-        return neighboursList;
+        if (noOfAliveNeighbours == 3 && cell.state == CellState.DEAD) {
+            return CellState.ALIVE;
+        }
+        if (noOfAliveNeighbours == 2 || noOfAliveNeighbours == 3 && cell.state == CellState.ALIVE) {
+            return cell.state;
+        }
+        return cell.state;
     }
 
-    private List<Cell> findNeighbour( int xCell, int yCell) {
-        List<Cell> neighbours=new ArrayList<>();
-        for (Cell cel : initialState) {
-            if (cel.x == xCell && cel.y == yCell) {
-                Cell neighbour = new Cell(cel.x, cel.y, cel.state);
-                neighbours.add(neighbour);
-            }
-        }
-        return neighbours;
+    private boolean findIfAlive(int xCell, int yCell) {
+        long neighbour=initialState.parallelStream().filter(cell -> cell.x==xCell).
+                filter(cell -> cell.y==yCell).
+                filter(cell -> cell.state==CellState.ALIVE).count();
+        if(neighbour>0)
+            return true;
+        return false;
     }
 
     private boolean isValid(int xCell, int yCell) {
@@ -79,10 +67,8 @@ public class Board {
         return false;
     }
 
-
-    List<Cell> displayNextState() {
+    Collection<Cell> displayNextState() {
         return nextState;
     }
-
 
 }
