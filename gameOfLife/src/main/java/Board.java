@@ -1,19 +1,14 @@
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class Board {
-    private int rows;
-    private int columns;
-    private Collection<Cell> initialState;
-    private Collection<Cell> nextState;
 
+    private HashMap<Cell, CellState> nextState;
+    private HashMap<Cell, CellState> initialState;
 
-    public Board(int rows, int columns, List<Cell> initialState) {
-        this.rows = rows;
-        this.columns = columns;
+    public Board(HashMap<Cell, CellState> initialState) {
         this.initialState = initialState;
-        nextState = new ArrayList<>();
+        nextState = new HashMap<>();
     }
 
     int aliveNeighbours(Cell cell) {
@@ -21,20 +16,20 @@ public class Board {
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (isValid(cell.x + i, cell.y + j) &&
-                        findIfAlive(cell.x + i, cell.y + j)) {
-                    noOfAliveNeighbours += 1;
-                }
+                Cell neighbourCell = new Cell(cell.x + i, cell.y + j);
+                noOfAliveNeighbours += initialState.keySet().stream().filter(cell1 -> cell1.equals(neighbourCell)).
+                        filter(cell1 -> !cell1.equals(cell)).
+                        filter(cell1 -> (initialState.get(cell1) == CellState.ALIVE)).count();
             }
         }
-        return noOfAliveNeighbours - cell.state.getState();
+        return noOfAliveNeighbours;
     }
 
     void nextState() {
-        for (Cell cell : initialState) {
+        for (Cell cell : initialState.keySet()) {
             int noOfAliveNeighbours = aliveNeighbours(cell);
             CellState state = nextGeneration(noOfAliveNeighbours, cell);
-            nextState.add(new Cell(cell.x, cell.y, state));
+            nextState.put(cell, state);
         }
     }
 
@@ -42,33 +37,30 @@ public class Board {
         if (noOfAliveNeighbours < 2 || noOfAliveNeighbours > 3) {
             return CellState.DEAD;
         }
-        if (noOfAliveNeighbours == 3 && cell.state == CellState.DEAD) {
+        if (noOfAliveNeighbours == 3 && initialState.get(cell) == CellState.DEAD) {
             return CellState.ALIVE;
         }
-        if (noOfAliveNeighbours == 2 || noOfAliveNeighbours == 3 && cell.state == CellState.ALIVE) {
-            return cell.state;
+        if (noOfAliveNeighbours == 2 || noOfAliveNeighbours == 3 && initialState.get(cell) == CellState.ALIVE) {
+            return initialState.get(cell);
         }
-        return cell.state;
+        return initialState.get(cell);
     }
 
-    private boolean findIfAlive(int xCell, int yCell) {
-        long neighbour=initialState.parallelStream().filter(cell -> cell.x==xCell).
-                filter(cell -> cell.y==yCell).
-                filter(cell -> cell.state==CellState.ALIVE).count();
-        if(neighbour>0)
-            return true;
-        return false;
-    }
-
-    private boolean isValid(int xCell, int yCell) {
-        if (xCell >= 0 && yCell >= 0 && xCell < columns && yCell < columns) {
-            return true;
-        }
-        return false;
-    }
-
-    Collection<Cell> displayNextState() {
+    HashMap<Cell, CellState> displayNextState() {
         return nextState;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        HashMap<Cell, CellState> that = (HashMap<Cell, CellState>) object;
+        if (this.nextState == that)
+            return true;
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nextState);
     }
 
 }

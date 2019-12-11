@@ -1,26 +1,24 @@
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BoardTest {
 
     @Test
     void getNoOfNeighboursForACell() {
-        Board board = new Board(3, 3, initialState());
-        Cell cell = new Cell(1, 1, CellState.ALIVE);
-        Cell cell1 = new Cell(0, 0, CellState.DEAD);
+        Board board = new Board( initialState());
+        Cell cell = new Cell(1, 1);
+        Cell cell1 = new Cell(0, 0);
         assertEquals(3, board.aliveNeighbours(cell));
         assertEquals(1, board.aliveNeighbours(cell1));
     }
 
     @Test
     void cellStateIs0IfAliveNeighboursIsLessThan2AndMoreThan3() {
-        Board board = new Board(3, 3, initialState());
-        Cell cell = initialState().get(2);
+        Board board = new Board(initialState());
+        Cell cell = new Cell(0, 2);
         int aliveNeighbours = board.aliveNeighbours(cell);
         CellState state = board.nextGeneration(aliveNeighbours, cell);
         assertEquals(CellState.DEAD, state);
@@ -28,8 +26,8 @@ public class BoardTest {
 
     @Test
     void deadCellWith3LiveNeighboursBecomeAlive() {
-        Board board = new Board(3, 3, initialState());
-        Cell cell = initialState().get(7);
+        Board board = new Board(initialState());
+        Cell cell = new Cell(2, 1);
         int aliveNeighbours = board.aliveNeighbours(cell);
         CellState state = board.nextGeneration(aliveNeighbours, cell);
 
@@ -38,8 +36,8 @@ public class BoardTest {
 
     @Test
     void liveCellWith2or3NeighboursStayAlive() {
-        Board board = new Board(3, 3, initialState());
-        Cell cell = initialState().get(4);
+        Board board = new Board(initialState());
+        Cell cell = new Cell(1, 1);
         int aliveNeighbours = board.aliveNeighbours(cell);
         CellState state = board.nextGeneration(aliveNeighbours, cell);
 
@@ -48,50 +46,39 @@ public class BoardTest {
 
     @Test
     void checkEachCellStatus() {
-        Board board = new Board(3, 3, initialState());
+        Board board = new Board( initialState());
         board.nextState();
-        List<Cell> expected=nextState().stream().collect(Collectors.toList());
-        List<Cell> actual=board.displayNextState().stream().collect(Collectors.toList());
 
-        assertEquals(expected,actual);
+        assertEquals(nextState(), board.displayNextState());
     }
 
-    @Test
-    void checkAliveOrDead() {
-        Board board = new Board(3, 3, initialState());
-        board.nextState();
-        Object[] expected=nextState().toArray();
-        Object[] actual=board.displayNextState().toArray();
-
-        assertArrayEquals(expected,actual);
+    private HashMap<Cell, CellState> initialState() {
+        HashMap<Cell, CellState> initialState = new HashMap<>();
+        initialState.put(new Cell(0, 0), CellState.DEAD);
+        initialState.put(new Cell(0, 1), CellState.DEAD);
+        initialState.put(new Cell(0, 2), CellState.ALIVE);
+        initialState.put(new Cell(1, 0), CellState.DEAD);
+        initialState.put(new Cell(1, 1), CellState.ALIVE);
+        initialState.put(new Cell(1, 2), CellState.DEAD);
+        initialState.put(new Cell(2, 0), CellState.ALIVE);
+        initialState.put(new Cell(2, 1), CellState.DEAD);
+        initialState.put(new Cell(2, 2), CellState.ALIVE);
+        return initialState;
     }
 
-    private List<Cell> initialState() {
-        List<Cell> state = new ArrayList<>();
-        state.add(new Cell(0, 0, CellState.DEAD));
-        state.add(new Cell(0, 1, CellState.DEAD));
-        state.add(new Cell(0, 2, CellState.ALIVE));
-        state.add(new Cell(1, 0, CellState.DEAD));
-        state.add(new Cell(1, 1, CellState.ALIVE));
-        state.add(new Cell(1, 2, CellState.DEAD));
-        state.add(new Cell(2, 0, CellState.ALIVE));
-        state.add(new Cell(2, 1, CellState.DEAD));
-        state.add(new Cell(2, 2, CellState.ALIVE));
-        return state;
-    }
+    private HashMap<Cell, CellState> nextState() {
+        HashMap<Cell, CellState> nextState = new HashMap<>();
 
-    private List<Cell> nextState() {
-        List<Cell> state = new ArrayList<>();
-        state.add(new Cell(0, 0, CellState.DEAD));
-        state.add(new Cell(0, 1, CellState.DEAD));
-        state.add(new Cell(0, 2, CellState.DEAD));
-        state.add(new Cell(1, 0, CellState.DEAD));
-        state.add(new Cell(1, 1, CellState.ALIVE));
-        state.add(new Cell(1, 2, CellState.ALIVE));
-        state.add(new Cell(2, 0, CellState.DEAD));
-        state.add(new Cell(2, 1, CellState.ALIVE));
-        state.add(new Cell(2, 2, CellState.DEAD));
-        return state;
+        nextState.put(new Cell(0, 0), CellState.DEAD);
+        nextState.put(new Cell(0, 1), CellState.DEAD);
+        nextState.put(new Cell(0, 2), CellState.DEAD);
+        nextState.put(new Cell(1, 0), CellState.DEAD);
+        nextState.put(new Cell(1, 1), CellState.ALIVE);
+        nextState.put(new Cell(1, 2), CellState.ALIVE);
+        nextState.put(new Cell(2, 0), CellState.DEAD);
+        nextState.put(new Cell(2, 1), CellState.ALIVE);
+        nextState.put(new Cell(2, 2), CellState.DEAD);
+        return nextState;
     }
 
 
