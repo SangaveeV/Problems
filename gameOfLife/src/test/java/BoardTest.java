@@ -8,7 +8,7 @@ public class BoardTest {
 
     @Test
     void getNoOfNeighboursForACell() {
-        Board board = new Board( initialState());
+        Board board = new Board(3,3, initialState());
         Cell cell = new Cell(1, 1);
         Cell cell1 = new Cell(0, 0);
         assertEquals(3, board.aliveNeighbours(cell));
@@ -17,7 +17,7 @@ public class BoardTest {
 
     @Test
     void cellStateIs0IfAliveNeighboursIsLessThan2AndMoreThan3() {
-        Board board = new Board(initialState());
+        Board board = new Board(3,3,initialState());
         Cell cell = new Cell(0, 2);
         int aliveNeighbours = board.aliveNeighbours(cell);
         CellState state = board.nextGeneration(aliveNeighbours, cell);
@@ -26,7 +26,7 @@ public class BoardTest {
 
     @Test
     void deadCellWith3LiveNeighboursBecomeAlive() {
-        Board board = new Board(initialState());
+        Board board = new Board(3,3,initialState());
         Cell cell = new Cell(2, 1);
         int aliveNeighbours = board.aliveNeighbours(cell);
         CellState state = board.nextGeneration(aliveNeighbours, cell);
@@ -36,7 +36,7 @@ public class BoardTest {
 
     @Test
     void liveCellWith2or3NeighboursStayAlive() {
-        Board board = new Board(initialState());
+        Board board = new Board(3,3,initialState());
         Cell cell = new Cell(1, 1);
         int aliveNeighbours = board.aliveNeighbours(cell);
         CellState state = board.nextGeneration(aliveNeighbours, cell);
@@ -46,7 +46,7 @@ public class BoardTest {
 
     @Test
     void checkEachCellStatus() {
-        Board board = new Board( initialState());
+        Board board = new Board( 3,3,initialState());
         board.nextState();
 
         assertEquals(nextState(), board.displayNextState());

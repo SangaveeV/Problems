@@ -3,10 +3,14 @@ import java.util.Objects;
 
 public class Board {
 
+    int rows;
+    int columns;
     private HashMap<Cell, CellState> nextState;
     private HashMap<Cell, CellState> initialState;
 
-    public Board(HashMap<Cell, CellState> initialState) {
+    public Board(int rows, int columns, HashMap<Cell, CellState> initialState) {
+        this.rows = rows;
+        this.columns = columns;
         this.initialState = initialState;
         nextState = new HashMap<>();
     }
@@ -16,12 +20,13 @@ public class Board {
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                Cell neighbourCell = new Cell(cell.x + i, cell.y + j);
-                noOfAliveNeighbours += initialState.keySet().stream().filter(cell1 -> cell1.equals(neighbourCell)).
-                        filter(cell1 -> !cell1.equals(cell)).
-                        filter(cell1 -> (initialState.get(cell1) == CellState.ALIVE)).count();
+                if (isValid(cell.getX() + i, cell.getY() + j)) {
+                    noOfAliveNeighbours += initialState.get(
+                            new Cell(cell.getX() + i, cell.getY() + j)).state;
+                }
             }
         }
+        noOfAliveNeighbours -= initialState.get(cell).state;
         return noOfAliveNeighbours;
     }
 
@@ -44,6 +49,13 @@ public class Board {
             return initialState.get(cell);
         }
         return initialState.get(cell);
+    }
+
+    private boolean isValid(int xCell, int yCell) {
+        if (xCell >= 0 && yCell >= 0 && xCell < columns && yCell < columns) {
+            return true;
+        }
+        return false;
     }
 
     HashMap<Cell, CellState> displayNextState() {
