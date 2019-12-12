@@ -1,49 +1,37 @@
 package businessHouseGame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Player {
 
     private final int playerNo;
-    private final double amount;
-    private final int hotelsOwned;
-    Cell currentPosition;
+    List<Cell> hotelsOwned;
+    Money money = new Money(1000);
+    Dice dice;
 
-    public Player(int playerNo,int amount,int hotelsOwned){
-        this.playerNo=playerNo;
-        this.amount=amount;
-        this.hotelsOwned=hotelsOwned;
-        currentPosition=new Cell(0,CellState.EMPTY);
+    public Player(int playerNo) {
+        this.playerNo = playerNo;
+        hotelsOwned = new ArrayList<>();
     }
 
-    public int getPlayerNo() {
-        return playerNo;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public int getHotelsOwned() {
-        return hotelsOwned;
+    public int play() {
+        int diceValue = dice.diceValue();
+        return diceValue;
     }
 
     @Override
     public boolean equals(Object object) {
         Player that = (Player) object;
-        if (this.playerNo==that.playerNo && this.amount==that.amount &&
-                this.hotelsOwned==that.hotelsOwned && this.currentPosition==that.currentPosition)
+        if (this.playerNo == that.playerNo)
             return true;
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(playerNo,amount,hotelsOwned);
+        return Objects.hash(playerNo);
     }
-
-
-
-
 
 }

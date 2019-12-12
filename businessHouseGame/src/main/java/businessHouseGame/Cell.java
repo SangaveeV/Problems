@@ -4,32 +4,32 @@ import java.util.Objects;
 
 public class Cell {
     private final int cellPosition;
-    private final CellState cellState;
+    private final CellType cellType;
 
-    public Cell(int cellPosition, CellState cellState) {
+    public Cell(int cellPosition, CellType cellType) {
         this.cellPosition = cellPosition;
-        this.cellState = cellState;
+        this.cellType = cellType;
     }
 
     public int getCellPosition() {
         return cellPosition;
     }
 
-    public CellState getCellState() {
-        return cellState;
+    public CellType getCellType() {
+        return cellType;
     }
 
     @Override
     public boolean equals(Object object) {
         Cell that = (Cell) object;
-        if (this.cellPosition == that.cellPosition && this.cellState == that.cellState)
+        if (this.cellPosition == that.cellPosition && this.cellType == that.cellType)
             return true;
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cellPosition, cellState);
+        return Objects.hash(cellPosition, cellType);
     }
 
 

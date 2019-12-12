@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="businessHouseGame.BoardTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2019-12-12T11:14:21" hostname="Vapasis-MacBook-Pro-8.local" time="0.012">
+  <properties/>
+  <testcase name="aPlayerMovesFourCellsWhenDiceOutputIsFour()" classname="businessHouseGame.BoardTest" time="0.007"/>
+  <testcase name="aPlayerMovesToTreasureAndAmount150IsAdded()" classname="businessHouseGame.BoardTest" time="0.001"/>
+  <testcase name="aPlayerMovesToHotelBuysIfHotelIsNotPreOwned()" classname="businessHouseGame.BoardTest" time="0.0"/>
+  <testcase name="aPlayerMovesToJailAndAmount150IsDeducted()" classname="businessHouseGame.BoardTest" time="0.0"/>
+  <testcase name="aPlayerMovesToHotelAndAmount200IsDeducted()" classname="businessHouseGame.BoardTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
