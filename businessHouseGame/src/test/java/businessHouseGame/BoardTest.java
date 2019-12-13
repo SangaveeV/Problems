@@ -2,7 +2,12 @@ package businessHouseGame;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,6 +68,14 @@ public class BoardTest {
         assertTrue(player.hotelsOwned.contains(cells.get(4)));
     }
 
+    @Test
+    void getPlayerAmountForSetOfDiceValues(){
+        BusinessGame businessGame=new BusinessGame(players(),cellType(),diceOutput());
+        businessGame.game();
+        assertEquals(850,businessGame.board.playersList.get(1).money.amount);
+
+    }
+
 
     List<Cell> cellType() {
         List<Cell> cells = new ArrayList<>();
@@ -80,6 +93,8 @@ public class BoardTest {
     List<Player> players() {
         List<Player> playersList = new ArrayList<>();
         playersList.add(new Player(1));
+        playersList.add(new Player(2));
+        playersList.add(new Player(3));
         return playersList;
     }
 
@@ -88,6 +103,12 @@ public class BoardTest {
         diceValue.add(4);
         diceValue.add(3);
         diceValue.add(6);
+        diceValue.add(2);
+        diceValue.add(5);
+        diceValue.add(1);
+        diceValue.add(3);
+        diceValue.add(7);
+        diceValue.add(2);
         return diceValue;
     }
 
