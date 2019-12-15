@@ -27,7 +27,7 @@ public class Board {
         nextPlayer();
     }
 
-    Player getCurrentPlayer() {
+    Player currentPlayer() {
         return playersList.get(currentPlayer);
     }
 

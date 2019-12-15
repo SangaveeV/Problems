@@ -1,6 +1,5 @@
 package businessHouseGame;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +16,7 @@ public class BusinessGame {
 
     void game(){
         while (playerHasChance() && dice.diceOutput.size()>0){
-            board.move(board.getCurrentPlayer());
+            board.move(board.currentPlayer());
            // board.nextPlayer();
         }
         playerDetails();
